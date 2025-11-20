@@ -70,6 +70,8 @@ Claude Desktop → HTTPS → Vercel → api/server.ts → mcp-handler → AITabl
 }
 ```
 
+**⚠️ Important:** For remote deployments, you must disable **Vercel Deployment Protection** (Settings → Deployment Protection → Turn OFF "Vercel Authentication") for MCP clients to connect. Your data remains secure through environment variables (AITABLE_API_TOKEN, SPACE_ID) configured per deployment.
+
 #### Local stdio (Local)
 ```
 Claude Desktop → stdio → src/stdio-server.ts → @modelcontextprotocol/sdk → AITable API
@@ -335,9 +337,11 @@ try {
 2. ❌ Returning raw strings instead of `{ content: [...] }` format
 3. ❌ Not wrapping content in an array
 4. ❌ Missing environment variables (AITABLE_API_TOKEN, SPACE_ID)
-5. ❌ Exceeding maxDuration without upgrading Vercel plan
-6. ❌ Not enabling Fluid Compute in Vercel settings
-7. ❌ Forgetting to include formula `.md` files in Vercel deployment
+5. ❌ **Not disabling Vercel Deployment Protection** - MCP clients cannot connect if "Vercel Authentication" is enabled
+6. ❌ Adding environment variables with trailing newlines (use `printf` not `echo` when using CLI)
+7. ❌ Exceeding maxDuration without upgrading Vercel plan
+8. ❌ Not enabling Fluid Compute in Vercel settings
+9. ❌ Forgetting to include formula `.md` files in Vercel deployment
 
 ## Local vs Vercel Differences
 

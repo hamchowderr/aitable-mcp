@@ -150,11 +150,17 @@ vercel --prod
 ```
 
 3. **Set environment variables in Vercel Dashboard:**
-   - Go to your project settings
-   - Add `AITABLE_API_TOKEN`
-   - Add `SPACE_ID`
+   - Go to your project settings → Environment Variables
+   - Add `AITABLE_API_TOKEN` (your AITable API token)
+   - Add `SPACE_ID` (your AITable space ID)
 
-4. **Your MCP server will be available at:**
+4. **Disable Deployment Protection (Required for MCP):**
+   - Go to your project settings → Deployment Protection
+   - **Turn OFF "Vercel Authentication"**
+   - This is required for Claude Desktop and other MCP clients to connect
+   - Your data remains secure through the API token configured in step 3
+
+5. **Your MCP server will be available at:**
 ```
 https://YOUR_DEPLOYMENT_URL.vercel.app/api/mcp
 ```
@@ -164,7 +170,7 @@ https://YOUR_DEPLOYMENT_URL.vercel.app/api/mcp
 https://YOUR_DEPLOYMENT_URL.vercel.app/api/health
 ```
 
-5. **Use as Custom Connector:**
+6. **Use as Custom Connector:**
    - The Vercel URL can be added as a custom MCP connector in ChatGPT and Claude Desktop
    - Use your deployment URL: `https://YOUR_DEPLOYMENT_URL.vercel.app/api/mcp`
 
