@@ -1,0 +1,45 @@
+{
+  "name": "aitable-mcp",
+  "version": "1.0.0",
+  "description": "AITable MCP Server with dual transport support (stdio and HTTP)",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "dev:stdio": "tsx src/stdio-server.ts",
+    "dev:http": "tsx src/http-server.ts",
+    "dev:vercel": "vercel dev"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  },
+  "keywords": [
+    "mcp",
+    "aitable",
+    "model-context-protocol"
+  ],
+  "author": "hamchowderr",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hamchowderr/aitable-mcp.git"
+  },
+  "homepage": "https://github.com/hamchowderr/aitable-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/hamchowderr/aitable-mcp/issues"
+  },
+  "dependencies": {
+    "mcp-handler": "^1.0.1",
+    "form-data": "^4.0.4",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.22.0",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.13.10",
+    "express": "^4.21.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

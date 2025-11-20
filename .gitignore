@@ -1,0 +1,33 @@
+# Vercel
+.vercel
+
+# Dependencies
+node_modules
+
+# Environment variables (contains secrets)
+.env
+.env.local
+.env.*.local
+
+# Claude Code settings
+.claude
+
+# Build output
+dist
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*

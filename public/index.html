@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AITable MCP Server</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+    }
+    h1 { color: #333; }
+    ul { line-height: 1.8; }
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 14px;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+    .warning {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      border-radius: 5px;
+      padding: 15px;
+      margin: 20px 0;
+      color: #856404;
+    }
+    .warning strong {
+      display: block;
+      margin-bottom: 10px;
+    }
+    .endpoint {
+      background: #e8f4f8;
+      padding: 10px;
+      margin: 10px 0;
+      border-left: 4px solid #0066cc;
+    }
+    a {
+      color: #0066cc;
+    }
+    h3 {
+      color: #333;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>AITable MCP Server on Vercel</h1>
+
+  <div class="warning">
+    <strong>⚠️ Important: AITable Has Been Discontinued</strong>
+    <p>AITable is no longer actively maintained. If you're looking to migrate to Bika (the successor platform), check out the <a href="https://github.com/hamchowderr/bika-mcp">Bika MCP Server</a>.</p>
+    <p><strong>AITable LTD Holders:</strong> Claim your free Bika account by filling out <a href="https://bika.ai/space/spcND68gdMMZBmGK67gvqNVx/node/fom8XyUsPAmUVwlgpq8bFxPw">this migration form</a> (available only for AITable LTD users).</p>
+  </div>
+
+  <p>This is a Model Context Protocol (MCP) server providing programmatic access to AITable datasheets, fields, records, and more.</p>
+
+  <h2>MCP Protocol Endpoints</h2>
+
+  <div class="endpoint">
+    <strong>Streamable HTTP Transport (Primary):</strong><br>
+    <code>/mcp</code>
+  </div>
+
+  <div class="endpoint">
+    <strong>SSE Transport (Alternative):</strong><br>
+    <code>/sse</code>
+  </div>
+
+  <h2>Using with Claude Desktop</h2>
+
+  <p>Add this server to your Claude Desktop configuration:</p>
+
+  <pre>{
+  "mcpServers": {
+    "aitable": {
+      "url": "https://your-deployment-url.vercel.app/mcp"
+    }
+  }
+}</pre>
+
+  <h2>Available Tools</h2>
+
+  <p>This server provides 16 AITable tools organized into categories:</p>
+
+  <h3>Database Tools</h3>
+  <ul>
+    <li><code>get_records</code> - Query datasheet records with filtering, sorting, pagination</li>
+    <li><code>create_records</code> - Create new records (max 10 per request)</li>
+    <li><code>update_records</code> - Update existing records (max 10 per request)</li>
+    <li><code>delete_records</code> - Delete records (max 10 per request)</li>
+    <li><code>get_fields</code> - Get field metadata from a datasheet</li>
+    <li><code>create_field</code> - Create a new field in a datasheet</li>
+    <li><code>delete_field</code> - Delete a field from a datasheet</li>
+    <li><code>get_views</code> - Get all views from a datasheet</li>
+    <li><code>create_datasheet</code> - Create a new datasheet</li>
+    <li><code>upload_attachment</code> - Upload files to attach to records</li>
+  </ul>
+
+  <h3>Node Tools</h3>
+  <ul>
+    <li><code>get_node_list</code> - List nodes in the space working directory</li>
+    <li><code>get_node_detail</code> - Get detailed information about a node</li>
+    <li><code>search_nodes</code> - Search for nodes by type and permissions</li>
+    <li><code>create_embed_link</code> - Create embeddable links for nodes</li>
+    <li><code>get_embed_links</code> - List all embed links for a node</li>
+    <li><code>delete_embed_link</code> - Delete/disable an embed link</li>
+  </ul>
+
+  <h2>Resources</h2>
+
+  <p>Formula reference documentation and additional resources are available as MCP resources:</p>
+  <ul>
+    <li>Formula Overview</li>
+    <li>Operators</li>
+    <li>Numeric Functions</li>
+    <li>String Functions</li>
+    <li>Logical Functions</li>
+    <li>Date/Time Functions</li>
+    <li>Array Functions</li>
+    <li>Field Color Reference</li>
+  </ul>
+
+  <h2>More Information</h2>
+
+  <p>
+    <a href="https://github.com/modelcontextprotocol">Model Context Protocol</a> |
+    <a href="https://aitable.ai/developers">AITable API Documentation</a> |
+    <a href="https://github.com/hamchowderr/aitable-mcp">GitHub Repository</a>
+  </p>
+
+  <p style="margin-top: 30px; color: #666; font-size: 14px;">
+    Built on top of <a href="https://github.com/hamchowderr/vercel-mcp-template">Vercel MCP Template</a>
+  </p>
+</body>
+</html>

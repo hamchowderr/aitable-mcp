@@ -1,0 +1,18 @@
+# Test files
+src/test-*.ts
+
+# Local development servers (not needed for Vercel serverless)
+src/stdio-server.ts
+src/http-server.ts
+src/client.ts
+
+# Build output (TypeScript will compile on Vercel)
+dist/
+
+# Development files
+.env.example
+.claude/
+
+# Git
+.git/
+.gitignore
