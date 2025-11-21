@@ -2,228 +2,396 @@
 
 ![AITable](./images/aitable.jpeg)
 
-A Model Context Protocol (MCP) server for [AITable](https://aitable.ai) with dual transport support:
-- **stdio** - for local use with Claude Desktop
-- **HTTP (Streamable)** - for remote use / deployment
+Model Context Protocol (MCP) server for integrating with AITable platform.
 
 > **⚠️ Important:** AITable has been discontinued. If you're looking to migrate to Bika (the successor platform), check out the [Bika MCP Server](https://github.com/hamchowderr/bika-mcp).
 >
 > **AITable LTD Holders:** Claim your free Bika account by filling out [this migration form](https://bika.ai/space/spcND68gdMMZBmGK67gvqNVx/node/fom8XyUsPAmUVwlgpq8bFxPw) (available only for AITable LTD users).
 
+## Overview
+
+This MCP server provides integration with AITable's API, enabling AI assistants to:
+- Query and filter datasheet records
+- Create, update, and delete records
+- Upload and manage attachments
+- Work with fields, views, and nodes
+- Create embeddable links
+
 ## Features
 
-### 16 Available Tools
+- **Records Management**: Full CRUD operations on AITable records
+- **Fields Management**: Create, query, and delete fields
+- **Views & Nodes**: Access datasheet views and workspace nodes
+- **Attachments**: Upload and manage files
+- **Embed Links**: Create and manage embeddable links
+- **Formula Resources**: Access AITable formula documentation
 
-**Records Management:**
-- `get_records` - Get records from datasheets (up to 1000 per request, 11 query parameters)
-- `create_records` - Create new records (up to 10 per request)
-- `update_records` - Update existing records (up to 10 per request)
-- `delete_records` - Delete records (up to 10 per request)
+## Prerequisites
 
-**Fields Management:**
-- `get_fields` - Get field metadata from datasheets
-- `create_field` - Create new fields in datasheets
-- `delete_field` - Delete fields from datasheets
+- Node.js >= 18.0.0
+- npm or pnpm
+- AITable account with API access token
 
-**Views & Datasheets:**
-- `get_views` - Get views from datasheets
-- `create_datasheet` - Create new datasheets with custom fields
+## Installation
 
-**Attachments:**
-- `upload_attachment` - Upload files to datasheets
+### Option 1: Install via npm (Recommended)
 
-**Nodes & Workspace:**
-- `get_node_list` - Get list of files in workspace (Fusion API v3)
-- `search_nodes` - Search nodes by type, permissions, and keywords (v2)
-- `get_node_detail` - Get detailed information about specific nodes
+Once published, you can install directly via npx:
 
-**Embed Links:**
-- `create_embed_link` - Create embeddable links for nodes
-- `get_embed_links` - List all embed links for a node (up to 30)
-- `delete_embed_link` - Delete/disable embed links
-
-## Important Notes
-
-**Default Field Names:** When creating datasheets without specifying fields, AITable auto-generates 3 default fields with Chinese names (选项, 标题, 附件). To ensure English field names, always specify fields explicitly when using `create_datasheet`.
-
-**File Upload Requirements:**
-- Use **absolute file paths** when uploading attachments (e.g., `C:/Users/<YOUR_USERNAME>/Documents/file.pdf`)
-- Maximum file size: **1 GB per attachment**
-- Only one file can be uploaded per API call
-- Supported formats: Images, PDFs, documents, and other common file types
-
-## Setup
-
-1. **Install dependencies:**
 ```bash
-pnpm install
+# No installation needed! Run directly with npx
+npx aitable-mcp
 ```
 
-2. **Configure environment variables:**
+### Option 2: Install from Source
 
-Copy `.env.example` to `.env`:
 ```bash
-cp .env.example .env
+# Clone the repository
+git clone https://github.com/hamchowderr/aitable-mcp.git
+cd aitable-mcp
+
+# Install dependencies
+npm install
+
+# Build the project
+npm run build
 ```
 
-Then edit `.env` with your credentials:
-```bash
-# Get your API token from https://aitable.ai workspace settings
-AITABLE_API_TOKEN=your_api_token_here
+## Configuration
 
-# Get your space ID from your AITable workspace URL (e.g., spcX9P2xUcKst)
-SPACE_ID=your_space_id_here
+### Environment Variables
+
+The server requires the following environment variables:
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `AITABLE_API_TOKEN` | Yes | Your AITable API access token |
+| `SPACE_ID` | Yes | Your AITable space ID |
+
+### Setting Environment Variables
+
+**Option 1: Environment variables**
+
+```bash
+# Windows
+set AITABLE_API_TOKEN=your-api-token-here
+set SPACE_ID=your-space-id
+
+# macOS/Linux
+export AITABLE_API_TOKEN="your-api-token-here"
+export SPACE_ID="your-space-id"
 ```
 
-3. **Build the project:**
-```bash
-pnpm build
+**Option 2: Create a `.env` file**
+
+Create a `.env` file in the project root:
+
+```env
+AITABLE_API_TOKEN=your-api-token-here
+SPACE_ID=your-space-id
 ```
 
 ## Usage
 
-### Option 1: stdio Server (for Claude Desktop)
+### Option 1: Claude Desktop (Stdio Transport)
 
-Configure Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json` on macOS or `%APPDATA%\Claude\claude_desktop_config.json` on Windows):
+The recommended way to use this MCP server is with Claude Desktop using stdio transport.
 
-**Production (recommended):**
-```json
-{
-  "mcpServers": {
-    "aitable": {
-      "command": "node",
-      "args": ["C:/Users/<YOUR_USERNAME>/code/aitable-mcp/dist/stdio-server.js"],
-      "env": {
-        "AITABLE_API_TOKEN": "your_token_here",
-        "SPACE_ID": "your_space_id_here"
-      }
-    }
-  }
-}
-```
+#### Configuration File Locations
 
-**Development mode with tsx:**
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+#### Using npx (Recommended)
+
+Add to your Claude Desktop configuration:
+
 ```json
 {
   "mcpServers": {
     "aitable": {
       "command": "npx",
-      "args": ["-y", "tsx", "C:/Users/<YOUR_USERNAME>/code/aitable-mcp/src/stdio-server.ts"],
+      "args": ["-y", "aitable-mcp"],
       "env": {
-        "AITABLE_API_TOKEN": "your_token_here",
-        "SPACE_ID": "your_space_id_here"
+        "AITABLE_API_TOKEN": "your-token-here",
+        "SPACE_ID": "your-space-id"
       }
     }
   }
 }
 ```
 
-After configuration:
-1. Save the config file
-2. Restart Claude Desktop
-3. Claude will now have access to all 16 AITable tools
+#### Using Local Installation
 
-### Option 2: HTTP Server (for remote access)
+For development or local installations:
 
-**Local Development:**
-```bash
-pnpm dev:http
+```json
+{
+  "mcpServers": {
+    "aitable": {
+      "command": "node",
+      "args": ["C:\\absolute\\path\\to\\aitable-mcp\\dist\\stdio-server.js"],
+      "env": {
+        "AITABLE_API_TOKEN": "your-token-here",
+        "SPACE_ID": "your-space-id"
+      }
+    }
+  }
+}
 ```
 
-The server will run at `http://localhost:3000/mcp`.
+**Important**: Restart Claude Desktop after updating the configuration.
 
-**Test with the client:**
+### Option 2: Testing with MCP Inspector
+
+Test your server locally with the official MCP Inspector:
+
 ```bash
-pnpm client
+# Run the inspector
+npm run inspector
+
+# Or run directly
+npx @modelcontextprotocol/inspector dist/stdio-server.js
 ```
 
-### Option 3: Deploy to Vercel
+This will:
+1. Start the MCP server
+2. Launch the inspector web interface at `http://localhost:6274`
+3. Allow you to test tools, resources, and prompts interactively
 
-1. **Install Vercel CLI:**
+### Option 3: Running Standalone (Stdio)
+
+Run the server directly for stdio transport:
+
 ```bash
-npm i -g vercel
+# Build and start
+npm run build
+npm start
+
+# Development mode with watch
+npm run dev
 ```
 
-2. **Deploy:**
-```bash
-vercel --prod
-```
+### Option 4: Custom Connector (HTTP Transport via Vercel)
 
-3. **Set environment variables in Vercel Dashboard:**
-   - Go to your project settings → Environment Variables
-   - Add `AITABLE_API_TOKEN` (your AITable API token)
-   - Add `SPACE_ID` (your AITable space ID)
+Deploy as a custom connector for HTTP-based MCP access.
 
-4. **Disable Deployment Protection (Required for MCP):**
-   - Go to your project settings → Deployment Protection
+#### Deploy to Vercel
+
+1. **Initial Deployment**:
+   ```bash
+   # Install Vercel CLI if needed
+   npm install -g vercel
+
+   # Deploy to Vercel
+   npx vercel@latest
+   ```
+
+2. **Production Deployment**:
+   ```bash
+   npx vercel@latest --prod
+   ```
+
+3. **Set Environment Variables**:
+
+   In your Vercel project settings (Settings → Environment Variables), add:
+   - `AITABLE_API_TOKEN` - Your AITable API token (required for authenticating with AITable)
+   - `SPACE_ID` - Your AITable space ID (required)
+
+4. **Disable Deployment Protection (Required for MCP)**:
+
+   In your Vercel project settings (Settings → Deployment Protection):
    - **Turn OFF "Vercel Authentication"**
    - This is required for Claude Desktop and other MCP clients to connect
    - Your data remains secure through the API token configured in step 3
 
-5. **Your MCP server will be available at:**
-```
-https://YOUR_DEPLOYMENT_URL.vercel.app/api/mcp
-```
+5. **Configure as Custom Connector in Claude Desktop**:
 
-**Health check endpoint:**
-```
-https://YOUR_DEPLOYMENT_URL.vercel.app/api/health
-```
+   **IMPORTANT**: Custom connectors must be configured via the Claude Desktop UI, NOT via `claude_desktop_config.json`.
 
-6. **Use as Custom Connector:**
-   - The Vercel URL can be added as a custom MCP connector in ChatGPT and Claude Desktop
-   - Use your deployment URL: `https://YOUR_DEPLOYMENT_URL.vercel.app/api/mcp`
+   **To add the custom connector:**
+   1. Open Claude Desktop
+   2. Go to **Settings → Connectors**
+   3. Click **Add Custom Connector**
+   4. Enter your deployment URL: `https://your-project.vercel.app/mcp`
+   5. Save and restart Claude Desktop
 
-## Development
+   **Note**: Make sure to include `/mcp` at the end of the URL!
 
-Build TypeScript:
-```bash
-pnpm build
-```
+6. **Test the Deployment**:
+   ```bash
+   # Test with the test script
+   node scripts/test-streamable-http-client.mjs https://your-project.vercel.app
+   ```
 
-Run stdio server (development):
-```bash
-pnpm dev:stdio
-```
+#### Deployment Options
 
-Run HTTP server (development):
-```bash
-pnpm dev:http
-```
+**Stdio vs HTTP Transport:**
+- **Stdio (Recommended)**: Lower latency, direct process communication, best for Claude Desktop
+- **HTTP (Custom Connector)**: Centralized deployment, multiple clients, better for cloud deployments
 
-Test with client:
-```bash
-pnpm client
-```
+**Which to use?**
+- Use **stdio** for local Claude Desktop integration
+- Use **HTTP** for centralized deployments, multiple users, or cloud-based AI clients
+
+## Security
+
+### Authentication Overview
+
+This MCP server uses different authentication strategies depending on the transport:
+
+**Stdio Transport (Recommended for Personal Use)**
+- Uses environment variables for AITable API authentication
+- No client authentication required (local process, no network exposure)
+- Most secure for personal use
+- Configure via `claude_desktop_config.json`
+
+**HTTP Transport (Custom Connector)**
+- Deployed to Vercel as a serverless function
+- Requires disabling Vercel Deployment Protection
+- CORS-enabled for browser-based access
+- Environment variables stored securely in Vercel
+
+### Security Best Practices
+
+**IMPORTANT:**
+- ⚠️ Keep your `AITABLE_API_TOKEN` secret - it grants full access to your AITable data
+- ⚠️ Keep your deployment URL private - share only with trusted users
+- ⚠️ **Disable Vercel Deployment Protection** for MCP clients to connect
+- ✅ Use environment variables in Vercel (never commit tokens to git)
+- ✅ Rotate your API token periodically
+- ✅ Monitor access logs in Vercel dashboard
+- ✅ For personal use, prefer stdio transport over HTTP
+
+## Architecture
+
+This MCP server supports **dual transport** following official MCP patterns:
+
+### Stdio Transport (src/stdio-server.ts)
+- Primary entry point for Claude Desktop
+- Direct process communication via stdin/stdout
+- Low latency, perfect for local development
+- Executable via `npx` or `node dist/stdio-server.js`
+
+### HTTP Transport (api/server.ts)
+- Vercel serverless function with CORS support
+- Uses `mcp-handler` library for HTTP transport
+- Supports custom connector deployments
+- All requests handled at root path with catch-all routing
+
+Both transports share the same core business logic while providing different communication mechanisms.
 
 ## Project Structure
 
 ```
 aitable-mcp/
 ├── src/
-│   ├── types.ts           # AITable API type definitions
-│   ├── aitable-tools.ts   # Shared tool implementations (16 tools)
-│   ├── stdio-server.ts    # stdio transport server (Claude Desktop)
-│   ├── http-server.ts     # HTTP transport server (local/remote)
-│   └── client.ts          # Test client
+│   ├── stdio-server.ts    # Stdio entry point
+│   ├── http-server.ts     # Local HTTP server for testing
+│   ├── aitable-tools.ts   # MCP tool implementations
+│   ├── formula-resource.ts # Formula documentation provider
+│   ├── types.ts           # TypeScript type definitions
+│   └── *.md               # Formula documentation files
 ├── api/
-│   └── mcp.ts             # Vercel serverless function
-├── dist/                  # Compiled JavaScript (not committed)
-├── .env                   # Your credentials (not committed)
-├── .env.example           # Example environment file
-├── .gitignore             # Git ignore rules
-├── vercel.json            # Vercel deployment config
-└── package.json
+│   └── server.ts          # HTTP entry point (Vercel)
+├── public/
+│   └── index.html         # Landing page
+├── scripts/
+│   ├── test-client.mjs                    # SSE transport tester
+│   └── test-streamable-http-client.mjs    # HTTP transport tester
+├── dist/                  # Compiled output
+├── package.json
+├── tsconfig.json
+├── vercel.json            # Vercel configuration
+└── README.md
 ```
 
-## API Rate Limits
+## Available Tools (16)
 
-AITable has different rate limits based on your plan:
-- Free: 2 QPS
-- Plus: 5 QPS
-- Pro: 10 QPS
-- Enterprise: 20 QPS
+The MCP server provides comprehensive AITable integration tools:
+
+### Records Management
+- `get_records` - Query records with filtering, sorting, and pagination
+- `create_records` - Create new records (max 10 per request)
+- `update_records` - Update existing records (max 10 per request)
+- `delete_records` - Delete records (max 10 per request)
+
+### Fields Management
+- `get_fields` - Get field metadata from datasheets
+- `create_field` - Create new fields in datasheets
+- `delete_field` - Delete fields from datasheets
+
+### Views & Datasheets
+- `get_views` - Get views from datasheets
+- `create_datasheet` - Create new datasheets with custom fields
+
+### Attachments
+- `upload_attachment` - Upload files to datasheets
+
+### Nodes & Workspace
+- `get_node_list` - Get list of files in workspace
+- `search_nodes` - Search nodes by type, permissions, and keywords
+- `get_node_detail` - Get detailed information about specific nodes
+
+### Embed Links
+- `create_embed_link` - Create embeddable links for nodes
+- `get_embed_links` - List all embed links for a node
+- `delete_embed_link` - Delete/disable embed links
+
+## Available Resources (8)
+
+Formula reference documentation:
+
+- `formula_overview` - Quick reference guide to AITable formulas
+- `formula_operators` - AITable formula operators
+- `formula_numeric` - AITable numeric functions
+- `formula_string` - AITable string functions
+- `formula_logical` - AITable logical functions
+- `formula_date` - AITable date/time functions
+- `formula_array` - AITable array functions
+- `field_colors` - AITable field color reference
+
+## Development
+
+```bash
+# Clean build artifacts
+npm run clean
+
+# Build TypeScript
+npm run build
+
+# Watch mode for development
+npm run dev
+
+# Test HTTP server locally
+npm run dev:http
+
+# Test with Vercel dev server
+npm run dev:vercel
+```
+
+## Contributing
+
+Contributions are welcome! Please ensure your changes maintain the dual-transport architecture.
+
+### For AI-Assisted Development
+
+If you're using Claude Code or other AI assistants to work on this codebase, run `/init` to generate a `CLAUDE.md` file with architectural guidance and development patterns specific to this project.
 
 ## License
 
 MIT
+
+## Related Projects
+
+### Bika MCP Server
+
+AITable has been discontinued. For the successor platform, check out the [Bika MCP Server](https://github.com/hamchowderr/bika-mcp). It provides similar MCP integration for Bika.ai, making it easy to migrate your workflows.
+
+## Resources
+
+- [AITable](https://aitable.ai)
+- [Bika.ai](https://bika.ai) - AITable successor platform
+- [Model Context Protocol](https://github.com/modelcontextprotocol)
+- [TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk)
+- [Bika MCP Server](https://github.com/hamchowderr/bika-mcp) - MCP server for Bika.ai integration

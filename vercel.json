@@ -1,5 +1,11 @@
 {
-  "rewrites": [{ "source": "/(.+)", "destination": "/api/server" }],
+  "buildCommand": "echo 'Skipping build - Vercel compiles TypeScript automatically'",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/api/server"
+    }
+  ],
   "functions": {
     "api/server.ts": {
       "maxDuration": 60,
