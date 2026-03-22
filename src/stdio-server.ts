@@ -5,6 +5,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { registerAITableTools } from "./aitable-tools.js";
 import { registerFormulaResource } from "./formula-resource.js";
+import { registerAITableApps } from "./aitable-apps.js";
 
 const API_TOKEN = process.env.AITABLE_API_TOKEN;
 const SPACE_ID = process.env.SPACE_ID;
@@ -31,6 +32,9 @@ async function main() {
 
   // Register formula reference resource
   registerFormulaResource(server);
+
+  // Register MCP Apps (interactive UIs)
+  registerAITableApps(server, API_TOKEN!, SPACE_ID!);
 
   // Create stdio transport
   const transport = new StdioServerTransport();
