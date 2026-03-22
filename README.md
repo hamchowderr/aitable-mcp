@@ -317,7 +317,7 @@ aitable-mcp/
 └── README.md
 ```
 
-## Available Tools (18)
+## Available Tools (24)
 
 The MCP server provides comprehensive AITable integration tools:
 
@@ -352,8 +352,14 @@ The MCP server provides comprehensive AITable integration tools:
 ### MCP Apps (Interactive UIs)
 - `view_records` - Interactive record browser with sortable table, search, and pagination
 - `view_space` - Visual workspace dashboard with node cards, stats, and search
+- `edit_record` - Form UI for creating/editing records with field-type-appropriate inputs
+- `design_datasheet` - Visual wizard for designing and creating new datasheets
+- `manage_fields` - Interactive field manager with create/delete and type badges
+- `preview_embeds` - Embed link manager with live iframe previews and copy/delete
+- `manage_attachments` - Attachment upload UI showing tokens and 2-step workflow
+- `explore_nodes` - Expandable folder tree explorer with detail panel and search
 
-## Available Resources (10)
+## Available Resources (16)
 
 Formula reference documentation:
 
@@ -370,6 +376,12 @@ MCP App UI resources (interactive):
 
 - `ui://aitable/record-browser.html` - Interactive record browser table UI
 - `ui://aitable/space-overview.html` - Visual workspace overview dashboard UI
+- `ui://aitable/record-editor.html` - Record create/edit form UI
+- `ui://aitable/datasheet-creator.html` - Datasheet design wizard UI
+- `ui://aitable/field-manager.html` - Field management UI
+- `ui://aitable/embed-previewer.html` - Embed link preview and management UI
+- `ui://aitable/attachment-manager.html` - Attachment upload and management UI
+- `ui://aitable/node-explorer.html` - Expandable folder tree explorer UI
 
 ## MCP Apps Extension
 

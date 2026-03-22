@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "node -e \"console.log('Compiling TypeScript...')\" && tsc && node -e \"console.log('Building MCP Apps...')\" && npm run build:apps && node -e \"require('fs').chmodSync('dist/src/stdio-server.js', '755')\" && node -e \"console.log('✓ Build completed successfully!')\"",
-    "build:apps": "INPUT=record-browser vite build && INPUT=space-overview vite build",
+    "build:apps": "INPUT=record-browser vite build && INPUT=space-overview vite build && INPUT=record-editor vite build && INPUT=datasheet-creator vite build && INPUT=field-manager vite build && INPUT=embed-previewer vite build && INPUT=attachment-manager vite build && INPUT=node-explorer vite build",
     "dev": "tsc --watch",
     "dev:http": "node dist/src/http-server.js",
     "dev:vercel": "vercel dev",
