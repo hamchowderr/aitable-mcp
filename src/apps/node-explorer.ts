@@ -162,7 +162,7 @@ async function toggleFolder(id: string) {
           name: "get_node_detail",
           arguments: { nodeId: id },
         });
-        const text = result.content?.find((c: any) => c.type === "text")?.text;
+        const text = (result.content?.find((c: any) => c.type === "text") as any)?.text;
         if (text) {
           const data = parseResult(text);
           if (data?.children) {

@@ -105,7 +105,7 @@ document.getElementById("datasheet-form")!.addEventListener("submit", async (e) 
       arguments: args,
     });
 
-    const text = result.content?.find((c: any) => c.type === "text")?.text || "";
+    const text = (result.content?.find((c: any) => c.type === "text") as any)?.text || "";
     feedbackEl.textContent = `Datasheet created successfully! ${text.includes("Datasheet ID:") ? text.match(/Datasheet ID: (\S+)/)?.[0] || "" : ""}`;
     feedbackEl.className = "feedback success";
   } catch (error: any) {
