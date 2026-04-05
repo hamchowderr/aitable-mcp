@@ -25,6 +25,7 @@ This MCP server provides integration with AITable's API, enabling AI assistants 
 - **Attachments**: Upload and manage files
 - **Embed Links**: Create and manage embeddable links
 - **Formula Resources**: Access AITable formula documentation
+- **MCP Apps (Interactive UIs)**: Visual record browser and space dashboard via the [MCP Apps Extension](https://github.com/modelcontextprotocol/ext-apps)
 
 ## Prerequisites
 
@@ -288,27 +289,35 @@ Both transports share the same core business logic while providing different com
 ```
 aitable-mcp/
 ├── src/
-│   ├── stdio-server.ts    # Stdio entry point
-│   ├── http-server.ts     # Local HTTP server for testing
-│   ├── aitable-tools.ts   # MCP tool implementations
-│   ├── formula-resource.ts # Formula documentation provider
-│   ├── types.ts           # TypeScript type definitions
-│   └── *.md               # Formula documentation files
+│   ├── stdio-server.ts      # Stdio entry point
+│   ├── http-server.ts       # Local HTTP server for testing
+│   ├── aitable-tools.ts     # MCP tool implementations
+│   ├── aitable-apps.ts      # MCP Apps registration (interactive UIs)
+│   ├── formula-resource.ts  # Formula documentation provider
+│   ├── types.ts             # TypeScript type definitions
+│   ├── apps/                # MCP App UI source files
+│   │   ├── record-browser.html  # Record browser UI template
+│   │   ├── record-browser.ts    # Record browser client logic
+│   │   ├── space-overview.html  # Space overview UI template
+│   │   └── space-overview.ts    # Space overview client logic
+│   └── *.md                 # Formula documentation files
 ├── api/
-│   └── server.ts          # HTTP entry point (Vercel)
+│   └── server.ts            # HTTP entry point (Vercel)
 ├── public/
-│   └── index.html         # Landing page
+│   └── index.html           # Landing page
 ├── scripts/
 │   ├── test-client.mjs                    # SSE transport tester
 │   └── test-streamable-http-client.mjs    # HTTP transport tester
-├── dist/                  # Compiled output
+├── dist/                    # Compiled output
+│   └── apps/                # Built MCP App HTML bundles
 ├── package.json
 ├── tsconfig.json
-├── vercel.json            # Vercel configuration
+├── vite.config.ts           # Vite config for building MCP Apps
+├── vercel.json              # Vercel configuration
 └── README.md
 ```
 
-## Available Tools (16)
+## Available Tools (24)
 
 The MCP server provides comprehensive AITable integration tools:
 
@@ -340,7 +349,17 @@ The MCP server provides comprehensive AITable integration tools:
 - `get_embed_links` - List all embed links for a node
 - `delete_embed_link` - Delete/disable embed links
 
-## Available Resources (8)
+### MCP Apps (Interactive UIs)
+- `view_records` - Interactive record browser with sortable table, search, and pagination
+- `view_space` - Visual workspace dashboard with node cards, stats, and search
+- `edit_record` - Form UI for creating/editing records with field-type-appropriate inputs
+- `design_datasheet` - Visual wizard for designing and creating new datasheets
+- `manage_fields` - Interactive field manager with create/delete and type badges
+- `preview_embeds` - Embed link manager with live iframe previews and copy/delete
+- `manage_attachments` - Attachment upload UI showing tokens and 2-step workflow
+- `explore_nodes` - Expandable folder tree explorer with detail panel and search
+
+## Available Resources (16)
 
 Formula reference documentation:
 
@@ -352,6 +371,45 @@ Formula reference documentation:
 - `formula_date` - AITable date/time functions
 - `formula_array` - AITable array functions
 - `field_colors` - AITable field color reference
+
+MCP App UI resources (interactive):
+
+- `ui://aitable/record-browser.html` - Interactive record browser table UI
+- `ui://aitable/space-overview.html` - Visual workspace overview dashboard UI
+- `ui://aitable/record-editor.html` - Record create/edit form UI
+- `ui://aitable/datasheet-creator.html` - Datasheet design wizard UI
+- `ui://aitable/field-manager.html` - Field management UI
+- `ui://aitable/embed-previewer.html` - Embed link preview and management UI
+- `ui://aitable/attachment-manager.html` - Attachment upload and management UI
+- `ui://aitable/node-explorer.html` - Expandable folder tree explorer UI
+
+## MCP Apps Extension
+
+This server implements the [MCP Apps Extension](https://github.com/modelcontextprotocol/ext-apps) — the first official extension to the Model Context Protocol. MCP Apps enable tools to return interactive UI components that render directly in the conversation.
+
+### How It Works
+
+1. When an AI assistant calls `view_records` or `view_space`, the tool fetches data from AITable
+2. The host (Claude, ChatGPT, VS Code, etc.) detects the `ui://` resource URI in the tool metadata
+3. The host fetches the HTML resource and renders it in a sandboxed iframe alongside the conversation
+4. The UI receives the tool result data and displays it as an interactive table or dashboard
+5. Users can sort, filter, and search within the rendered UI directly
+
+### Supported Hosts
+
+MCP Apps are supported in ChatGPT, Claude, VS Code, Goose, and other MCP-compatible clients that implement the `io.modelcontextprotocol/ui` extension.
+
+### Building Apps
+
+The MCP App HTML files are built as self-contained single-file bundles using Vite:
+
+```bash
+# Build only the MCP App UIs
+npm run build:apps
+
+# Full build (TypeScript + MCP Apps)
+npm run build
+```
 
 ## Development
 
@@ -396,4 +454,5 @@ AITable has been discontinued. For the successor platform, check out the [Bika M
 - [Bika.ai](https://bika.ai) - AITable successor platform
 - [Model Context Protocol](https://github.com/modelcontextprotocol)
 - [TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk)
+- [MCP Apps Extension](https://github.com/modelcontextprotocol/ext-apps) - Interactive UIs for MCP servers
 - [Bika MCP Server](https://github.com/hamchowderr/bika-mcp) - MCP server for Bika.ai integration

@@ -6,6 +6,7 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import express, { Request, Response } from "express";
 import { registerAITableTools } from "./aitable-tools.js";
 import { registerFormulaResource } from "./formula-resource.js";
+import { registerAITableApps } from "./aitable-apps.js";
 
 const API_TOKEN = process.env.AITABLE_API_TOKEN;
 const SPACE_ID = process.env.SPACE_ID;
@@ -37,6 +38,8 @@ function getServer(): McpServer {
   // Register formula reference resource
   registerFormulaResource(server);
 
+  // Register MCP Apps (interactive UIs)
+  registerAITableApps(server, API_TOKEN!, SPACE_ID!);
 
   return server;
 }

@@ -3,32 +3,35 @@
   "version": "1.0.0",
   "description": "Model Context Protocol server for AITable",
   "type": "module",
-  "main": "dist/stdio-server.js",
-  "types": "dist/stdio-server.d.ts",
+  "main": "dist/src/stdio-server.js",
+  "types": "dist/src/stdio-server.d.ts",
   "bin": {
-    "aitable-mcp": "./dist/stdio-server.js"
+    "aitable-mcp": "./dist/src/stdio-server.js"
   },
   "files": [
     "dist"
   ],
   "exports": {
     ".": {
-      "types": "./dist/stdio-server.d.ts",
-      "import": "./dist/stdio-server.js"
+      "types": "./dist/src/stdio-server.d.ts",
+      "import": "./dist/src/stdio-server.js"
     }
   },
   "scripts": {
-    "build": "node -e \"console.log('Compiling TypeScript...')\" && tsc && node -e \"require('fs').chmodSync('dist/stdio-server.js', '755')\" && node -e \"console.log('✓ Build completed successfully!')\"",
+    "build": "node -e \"console.log('Compiling TypeScript...')\" && tsc && node -e \"console.log('Building MCP Apps...')\" && npm run build:apps && node -e \"require('fs').chmodSync('dist/src/stdio-server.js', '755')\" && node -e \"console.log('✓ Build completed successfully!')\"",
+    "build:apps": "INPUT=record-browser vite build && INPUT=space-overview vite build && INPUT=record-editor vite build && INPUT=datasheet-creator vite build && INPUT=field-manager vite build && INPUT=embed-previewer vite build && INPUT=attachment-manager vite build && INPUT=node-explorer vite build",
     "dev": "tsc --watch",
-    "dev:http": "node dist/http-server.js",
+    "dev:http": "node dist/src/http-server.js",
     "dev:vercel": "vercel dev",
-    "start": "node dist/stdio-server.js",
-    "inspector": "npx @modelcontextprotocol/inspector dist/stdio-server.js",
+    "start": "node dist/src/stdio-server.js",
+    "inspector": "npx @modelcontextprotocol/inspector dist/src/stdio-server.js",
     "clean": "rimraf dist"
   },
   "keywords": [
     "mcp",
     "model-context-protocol",
+    "mcp-apps",
+    "mcp-extension",
     "aitable",
     "aitable.ai"
   ],
@@ -43,7 +46,8 @@
     "url": "https://github.com/hamchowderr/aitable-mcp/issues"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.22.0",
+    "@modelcontextprotocol/ext-apps": "^1.2.2",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "@vercel/node": "^5.5.6",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
@@ -59,6 +63,8 @@
     "@types/node": "^20.0.0",
     "rimraf": "^5.0.0",
     "tsx": "^4.19.2",
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "vite": "^8.0.1",
+    "vite-plugin-singlefile": "^2.3.2"
   }
 }

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AITable Datasheet Creator</title>
+  <style>
+    :root {
+      --bg: #ffffff; --bg-secondary: #f8f9fa; --text: #1a1a2e;
+      --text-secondary: #6c757d; --border: #dee2e6; --accent: #7c3aed;
+      --accent-light: #ede9fe; --hover: #f1f3f5; --shadow: rgba(0,0,0,0.08);
+      --danger: #dc2626; --danger-light: #fef2f2;
+      --success: #16a34a; --success-light: #dcfce7;
+    }
+    .dark {
+      --bg: #1a1a2e; --bg-secondary: #16213e; --text: #e8e8e8;
+      --text-secondary: #a0a0b0; --border: #2d2d44; --accent: #a78bfa;
+      --accent-light: #2d2050; --hover: #252540; --shadow: rgba(0,0,0,0.3);
+      --danger: #f87171; --danger-light: #450a0a;
+      --success: #4ade80; --success-light: #14532d;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); padding: 16px; line-height: 1.5;
+    }
+    h2 { font-size: 18px; font-weight: 600; margin-bottom: 16px; }
+    h3 { font-size: 14px; font-weight: 600; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .section { margin-bottom: 20px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;
+      color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    input, textarea, select {
+      width: 100%; padding: 10px 14px; border: 1px solid var(--border);
+      border-radius: 8px; background: var(--bg-secondary); color: var(--text);
+      font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+    textarea { min-height: 60px; resize: vertical; }
+    .field-row {
+      display: flex; gap: 10px; align-items: center; padding: 12px;
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: 8px; margin-bottom: 8px;
+    }
+    .field-row .field-num {
+      font-size: 12px; font-weight: 700; color: var(--accent);
+      min-width: 24px; text-align: center;
+    }
+    .field-row input { flex: 1; }
+    .field-row select { width: 160px; flex-shrink: 0; }
+    .field-row .remove-btn {
+      background: none; border: none; color: var(--danger); cursor: pointer;
+      font-size: 18px; padding: 4px 8px; border-radius: 4px; line-height: 1;
+    }
+    .field-row .remove-btn:hover { background: var(--danger-light); }
+    .btn {
+      padding: 10px 20px; border: none; border-radius: 8px; font-size: 14px;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .btn-secondary {
+      background: var(--bg-secondary); color: var(--accent);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--accent); }
+    .actions { display: flex; gap: 12px; margin-top: 20px; }
+    .feedback { margin-top: 12px; padding: 12px 16px; border-radius: 8px; font-size: 13px; display: none; }
+    .feedback.success { display: block; background: var(--success-light); color: var(--success); }
+    .feedback.error { display: block; background: var(--danger-light); color: var(--danger); }
+    .preview {
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px; font-family: monospace; font-size: 12px;
+      white-space: pre-wrap; word-break: break-all; margin-top: 12px; display: none;
+      max-height: 200px; overflow-y: auto;
+    }
+    .counter {
+      font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Create New Datasheet</h2>
+  <form id="datasheet-form">
+    <div class="section">
+      <h3>Basic Info</h3>
+      <div class="form-group">
+        <label>Datasheet Name *</label>
+        <input type="text" id="ds-name" placeholder="My Datasheet" maxlength="100" required />
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="ds-description" placeholder="Optional description..." maxlength="500"></textarea>
+      </div>
+    </div>
+    <div class="section">
+      <h3>Fields</h3>
+      <div class="counter" id="field-counter">0 fields (leave empty for 3 defaults)</div>
+      <div id="fields-container"></div>
+      <button type="button" class="btn btn-secondary" id="add-field-btn">+ Add Field</button>
+    </div>
+    <div class="actions">
+      <button type="submit" class="btn btn-primary" id="submit-btn">Create Datasheet</button>
+      <button type="button" class="btn btn-secondary" id="preview-btn">Preview JSON</button>
+    </div>
+  </form>
+  <div class="preview" id="preview"></div>
+  <div id="feedback" class="feedback"></div>
+  <script type="module" src="./datasheet-creator.ts"></script>
+</body>
+</html>

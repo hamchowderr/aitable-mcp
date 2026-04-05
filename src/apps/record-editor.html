@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AITable Record Editor</title>
+  <style>
+    :root {
+      --bg: #ffffff; --bg-secondary: #f8f9fa; --text: #1a1a2e;
+      --text-secondary: #6c757d; --border: #dee2e6; --accent: #7c3aed;
+      --accent-light: #ede9fe; --hover: #f1f3f5; --shadow: rgba(0,0,0,0.08);
+    }
+    .dark {
+      --bg: #1a1a2e; --bg-secondary: #16213e; --text: #e8e8e8;
+      --text-secondary: #a0a0b0; --border: #2d2d44; --accent: #a78bfa;
+      --accent-light: #2d2050; --hover: #252540; --shadow: rgba(0,0,0,0.3);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text); padding: 16px; line-height: 1.5;
+    }
+    .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .header h2 { font-size: 18px; font-weight: 600; }
+    .mode-badge {
+      padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .mode-badge.create { background: #dcfce7; color: #16a34a; }
+    .mode-badge.edit { background: var(--accent-light); color: var(--accent); }
+    .dark .mode-badge.create { background: #14532d; color: #4ade80; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px;
+      color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .form-group label .field-type {
+      font-weight: 400; text-transform: none; font-size: 11px;
+      color: var(--text-secondary); opacity: 0.7;
+    }
+    input, textarea, select {
+      width: 100%; padding: 10px 14px; border: 1px solid var(--border);
+      border-radius: 8px; background: var(--bg-secondary); color: var(--text);
+      font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+    textarea { min-height: 80px; resize: vertical; }
+    .checkbox-wrapper {
+      display: flex; align-items: center; gap: 8px; padding: 10px 0;
+    }
+    .checkbox-wrapper input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); }
+    .btn {
+      padding: 12px 24px; border: none; border-radius: 8px; font-size: 14px;
+      font-weight: 600; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-primary { background: var(--accent); color: white; }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .actions { display: flex; gap: 12px; margin-top: 20px; }
+    .feedback {
+      margin-top: 12px; padding: 12px 16px; border-radius: 8px; font-size: 13px; display: none;
+    }
+    .feedback.success { display: block; background: #dcfce7; color: #16a34a; }
+    .feedback.error { display: block; background: #fef2f2; color: #dc2626; }
+    .dark .feedback.success { background: #14532d; color: #4ade80; }
+    .dark .feedback.error { background: #450a0a; color: #f87171; }
+    .loading { text-align: center; padding: 40px; color: var(--text-secondary); }
+    .loading .spinner {
+      width: 32px; height: 32px; border: 3px solid var(--border);
+      border-top-color: var(--accent); border-radius: 50%;
+      animation: spin 0.8s linear infinite; margin: 0 auto 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .multi-select-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .multi-select-group label {
+      display: flex; align-items: center; gap: 6px; padding: 6px 12px;
+      background: var(--bg-secondary); border: 1px solid var(--border);
+      border-radius: 6px; cursor: pointer; font-size: 13px;
+      text-transform: none; letter-spacing: normal; font-weight: 400; color: var(--text);
+    }
+    .multi-select-group label:hover { border-color: var(--accent); }
+    .multi-select-group input:checked + span { color: var(--accent); font-weight: 500; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h2 id="title">Record Editor</h2>
+    <span class="mode-badge create" id="mode-badge">Create</span>
+  </div>
+  <div id="content">
+    <div class="loading">
+      <div class="spinner"></div>
+      <div>Loading field metadata...</div>
+    </div>
+  </div>
+  <div id="feedback" class="feedback"></div>
+  <script type="module" src="./record-editor.ts"></script>
+</body>
+</html>
