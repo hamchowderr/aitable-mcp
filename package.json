@@ -43,7 +43,7 @@
     "url": "https://github.com/hamchowderr/aitable-mcp/issues"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.22.0",
+    "@modelcontextprotocol/sdk": "^1.32.0",
     "@vercel/node": "^5.5.6",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
